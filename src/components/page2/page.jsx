@@ -4,9 +4,6 @@ class Page2 extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            a: 'a'
-        };
     }
     state = {
         a: 'a'
@@ -18,7 +15,7 @@ class Page2 extends Component {
             <div>
                 page2
                 {
-                    this.state
+                    this.state.a
                 }
                 <input type="text" defaultValue={value}/>
             </div>

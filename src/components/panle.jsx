@@ -4,20 +4,22 @@ import Page2 from '../components/page2/page';
 
 const TabPane = Tabs.TabPane;
 
-class El2 extends Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
+console.log(Page2)
+// class El2 extends Component {
+//     constructor(props) {
+//         super(props)
+//     }
+//     render() {
+//         console.log(this)
+//         return (
+//             this.props.render()
+//         );
+//     }
+// }
 
-        return (
-            <>
-                {
-                    this.props.default.prototype.render()
-                }
-            </>
-        );
-    }
+function El2(props) {
+    console.log(props.render)
+    return <props.render />
 }
 
 class Panle extends Component {
@@ -108,7 +110,8 @@ class Panle extends Component {
                                 }
                                 {pane.content}
                                 {
-                                    <El2 render={() => require(pane.componentURL)} />
+                                    // <El2 render={() => require(pane.componentURL)} />
+                                    <El2 render={pane.component} />
                                 }
                             </TabPane>
                         )
