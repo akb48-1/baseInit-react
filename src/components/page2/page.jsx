@@ -4,20 +4,45 @@ class Page2 extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            b: 'b',
+            a: 1
+        };
+        this.textInput = null
+        this.timer = null
     }
-    state = {
-        a: 'a'
-    };
+    timeout = () => {
+        
+        this.timer = setTimeout(() => {
+            if (this.timer !== null) {
+                clearTimeout(this.timer)
+            }
+            this.setState((prevState, props) => ({
+                a: prevState.a + 1
+            }))
+            this.textInput && (this.textInput.value = this.state.a)
+        }, 1000);
+    }
+    componentDidMount = () => {
+        console.log(this.props, 'componentDidMount')
+    }
+    componentWillMount = () => {
+        console.log(this.props, 'componentWillMount')
+    }
+    componentWillUnMount = () => {
+        clearTimeout(this.timer)
+    }
+    
     render() {
-        var value = 123
-        console.log(this.state, 'state')
+        
+        this.timeout()
         return (
             <div>
-                page2
                 {
                     this.state.a
                 }
-                <input type="text" defaultValue={value}/>
+                <br />
+                <input type="text" defaultValue={this.state.a} ref={(input) => { this.textInput = input; }}/>
             </div>
         );
     }

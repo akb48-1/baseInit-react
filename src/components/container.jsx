@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Button } from 'antd';
+import { Layout, Icon } from 'antd';
 import Panle from './panle';
 const { Header, Content } = Layout;
 
-console.log(Panle)
 class Container extends Component {
     render() {
         return (

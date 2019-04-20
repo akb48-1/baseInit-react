@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
 class Page1 extends Component {
+    componentDidMount = () => {
+        console.log(this.props, 'componentDidMount')
+    }
+    componentWillMount = () => {
+        console.log(this.props, 'componentWillMount')
+    }
     render() {
         return (
             <div>

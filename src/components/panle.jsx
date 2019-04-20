@@ -1,67 +1,60 @@
 import React, { Component } from 'react';
-import { Tabs, Button } from 'antd';
-import Page2 from '../components/page2/page';
+import { Tabs } from 'antd';
+import img from '../logo.svg';
+import Loadable from 'react-loadable';
 
 const TabPane = Tabs.TabPane;
+const panes = [
+    {
+        title: 'Tab 1',
+        content: 'Content of Tab Pane 1',
+        key: '1',
+        component: require('../components/page1/page.jsx').default
+    }, {
+        title: 'Tab2',
+        content: 'Content of Tab Pane 2',
+        key: '2',
+        component: require('../components/page2/page.jsx').default
+    }, {
+        title: 'Tab3',
+        content: 'Content of Tab Pane 3',
+        key: '3',
+        component: require('../components/page3/page.jsx').default
+    }
+];
 
-console.log(Page2)
-// class El2 extends Component {
-//     constructor(props) {
-//         super(props)
-//     }
-//     render() {
-//         console.log(this)
-//         return (
-//             this.props.render()
-//         );
-//     }
-// }
-
-function El2(props) {
-    console.log(props.render)
-    return <props.render />
+console.log(img)
+const Render = (props) => {
+    var newProps = {}
+    Object.keys(props).forEach((key) => {
+        key !== 'is' && (newProps[key] = props[key])
+    })
+    return <props.is {...newProps}/>
 }
 
 class Panle extends Component {
     constructor(props) {
         super(props);
         this.newTabIndex = 0;
-        const panes = [
-            {
-                title: 'Tab 1',
-                content: 'Content of Tab Pane 1',
-                key: '1',
-                component: () => require('../components/page1/page.jsx'),
-                componentURL: '../components/page1/page.jsx'
-            }, {
-                title: 'Tab2',
-                content: 'Content of Tab Pane 2',
-                key: '2',
-                component: () => require('../components/page2/page.jsx'),
-                componentURL: '../components/page2/page.jsx'
-            }, {
-                title: 'Tab3',
-                content: 'Content of Tab Pane 3',
-                key: '3',
-                component: () => require('../components/page3/page.jsx'),
-                componentURL: '../components/page3/page.jsx'
-            }
-        ];
         this.state = {
             activeKey: panes[0].key,
             panes,
         };
+        this.div = null
     }
 
     onChange = (activeKey) => {
+        console.log('onChange')
         this.setState({ activeKey });
     }
 
     onEdit = (targetKey, action) => {
+        console.log('onEdit')
         this[action](targetKey);
     }
 
     add = () => {
+        console.log('add')
         const panes = this.state.panes;
         const activeKey = `newTab${this.newTabIndex++}`;
         panes.push({ title: 'New Tab', content: 'New Tab Pane' + this.newTabIndex, key: activeKey });
@@ -69,6 +62,7 @@ class Panle extends Component {
     }
 
     remove = (targetKey) => {
+        console.log('remove')
         let activeKey = this.state.activeKey;
         let lastIndex;
         this.state.panes.forEach((pane, i) => {
@@ -86,11 +80,21 @@ class Panle extends Component {
         }
         this.setState({ panes, activeKey });
     }
-
+    renderPanes = (panes) => {
+        return (this.state.panes.map(pane =>
+            <TabPane tab={pane.title} key={pane.key}>
+                {/* {pane.content} */}
+                {
+                    <Render is={pane.component} parent={this} prem={this.div} />
+                }
+            </TabPane>
+        ))
+    }
+    
     render() {
         return (
-            <div>
-                {/* <Page2 /> */}
+
+            <div ref={(div)=> this.div = div}>
                 <div style={{ marginBottom: 16 }}>
                     {/* <Button onClick={this.add}>ADD</Button> */}
                 </div>
@@ -102,19 +106,7 @@ class Panle extends Component {
                     onEdit={this.onEdit}
                 >
                     {
-
-                        this.state.panes.map(pane =>
-                            <TabPane tab={pane.title} key={pane.key}>
-                                {
-                                    console.log(6666)
-                                }
-                                {pane.content}
-                                {
-                                    // <El2 render={() => require(pane.componentURL)} />
-                                    <El2 render={pane.component} />
-                                }
-                            </TabPane>
-                        )
+                        this.renderPanes()
                     }
                 </Tabs>
             </div>

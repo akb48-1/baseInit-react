@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Row, Col } from 'antd';
+import { Layout } from 'antd';
 
 import LeftMenu from './components/leftMenu';
 import Container from './components/container';
@@ -21,8 +21,9 @@ class App extends Component {
       <div className="App">
         <header id="header">
           <div id="logo" >
-            <a href="">
-              <img src={'img/logo.svg'} /></a>
+            <a href="aaa">
+              <img src={'img/logo.svg'} alt=""/>
+            </a>
               React
           </div>
           <div id="nav" >nav</div>
