@@ -1,35 +1,41 @@
 import React, { Component } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
 import img from '../logo.svg';
 import Loadable from 'react-loadable';
+import { panes } from '../util/map';
+import axios from 'axios';
 
 const TabPane = Tabs.TabPane;
-const panes = [
-    {
-        title: 'Tab 1',
-        content: 'Content of Tab Pane 1',
-        key: '1',
-        component: require('../components/page1/page.jsx').default
-    }, {
-        title: 'Tab2',
-        content: 'Content of Tab Pane 2',
-        key: '2',
-        component: require('../components/page2/page.jsx').default
-    }, {
-        title: 'Tab3',
-        content: 'Content of Tab Pane 3',
-        key: '3',
-        component: require('../components/page3/page.jsx').default
-    }
-];
+
 
 console.log(img)
-const Render = (props) => {
-    var newProps = {}
-    Object.keys(props).forEach((key) => {
-        key !== 'is' && (newProps[key] = props[key])
-    })
-    return <props.is {...newProps}/>
+class Render extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            El : () => ''
+        }
+    }
+    componentDidMount() {
+        console.log('componentDidMount')
+    }
+    async componentWillMount() {
+        console.log('componentWillMount')
+        var El = await this.props.component
+        this.setState({
+            El: El.default
+        })
+    }
+    render() {
+        console.log('render')
+        var { props } = this
+        var { El } = this.state
+        var newProps = {}
+        Object.keys(props).forEach((key) => {
+            key !== 'component' && (newProps[key] = props[key])
+        })
+        return <El {...newProps} />
+    }
 }
 
 class Panle extends Component {
@@ -37,7 +43,7 @@ class Panle extends Component {
         super(props);
         this.newTabIndex = 0;
         this.state = {
-            activeKey: panes[0].key,
+            activeKey: panes[0].keyName,
             panes,
         };
         this.div = null
@@ -48,8 +54,9 @@ class Panle extends Component {
         this.setState({ activeKey });
     }
 
-    onEdit = (targetKey, action) => {
+    onEdi = (targetKey, action) => {
         console.log('onEdit')
+        console.log(targetKey, action)
         this[action](targetKey);
     }
 
@@ -57,7 +64,11 @@ class Panle extends Component {
         console.log('add')
         const panes = this.state.panes;
         const activeKey = `newTab${this.newTabIndex++}`;
-        panes.push({ title: 'New Tab', content: 'New Tab Pane' + this.newTabIndex, key: activeKey });
+        panes[panes.length] = {
+            title: 'Tab3',
+            keyName: activeKey,
+            component: import('../components/page3/page.jsx')
+        }
         this.setState({ panes, activeKey });
     }
 
@@ -70,33 +81,32 @@ class Panle extends Component {
                 lastIndex = i - 1;
             }
         });
-        const panes = this.state.panes.filter(pane => pane.key !== targetKey);
+        const panes = this.state.panes.filter(pane => pane.keyName !== targetKey);
         if (panes.length && activeKey === targetKey) {
             if (lastIndex >= 0) {
-                activeKey = panes[lastIndex].key;
+                activeKey = panes[lastIndex].keyName;
             } else {
-                activeKey = panes[0].key;
+                activeKey = panes[0].keyName;
             }
         }
         this.setState({ panes, activeKey });
     }
-    renderPanes = (panes) => {
-        return (this.state.panes.map(pane =>
-            <TabPane tab={pane.title} key={pane.key}>
-                {/* {pane.content} */}
-                {
-                    <Render is={pane.component} parent={this} prem={this.div} />
-                }
-            </TabPane>
-        ))
-    }
+    // renderPanes() {
+    //     return (this.state.panes.map(pane =>
+    //         <TabPane tab={pane.title} key={pane.keyName} closable={pane.closable}>
+    //             {
+    //                 <Render {...pane} parent={this} prem={this.div} />
+    //             }
+    //         </TabPane>
+    //     ))
+    // }
     
     render() {
         return (
 
             <div ref={(div)=> this.div = div}>
                 <div style={{ marginBottom: 16 }}>
-                    {/* <Button onClick={this.add}>ADD</Button> */}
+                    <Button onClick={this.add}>ADD</Button>
                 </div>
                 <Tabs
                     hideAdd
@@ -106,7 +116,7 @@ class Panle extends Component {
                     onEdit={this.onEdit}
                 >
                     {
-                        this.renderPanes()
+                        renderPanes(this)
                     }
                 </Tabs>
             </div>
@@ -114,6 +124,14 @@ class Panle extends Component {
     }
 }
 
-
+const renderPanes = (that) => {
+    return (that.state.panes.map(pane =>
+        <TabPane tab={pane.title} key={pane.keyName} closable={pane.closable}>
+            {
+                <Render {...pane} parent={that} />
+            }
+        </TabPane>
+    ))
+}
 
 export default Panle
