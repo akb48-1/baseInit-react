@@ -7,7 +7,9 @@
     "axios": "^0.18.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "react-redux": "^7.0.3",
+    "react-scripts": "2.1.8",
+    "redux": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,6 +33,7 @@
   "homepage": ".",
   "devDependencies": {
     "node-sass": "^4.11.0",
-    "react-loadable": "^5.5.0"
+    "react-loadable": "^5.5.0",
+    "redux-devtools": "^3.5.0"
   }
 }
