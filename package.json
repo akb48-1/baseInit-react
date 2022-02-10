@@ -32,7 +32,7 @@
   ],
   "homepage": ".",
   "devDependencies": {
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "react-loadable": "^5.5.0",
     "redux-devtools": "^3.5.0"
   }
